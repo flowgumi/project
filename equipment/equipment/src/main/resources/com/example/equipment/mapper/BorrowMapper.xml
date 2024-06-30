@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.equipment.mapper.BorrowMapper">
+
+    <insert id="borrow">
+        insert into researchequipment.borrow
+        (user_id, dept_id, equipment_id, equipmentDept_id,borrow_time,status,equipment_name)
+        VALUES (#{userId},#{deptId},#{equipmentId},#{equipmentDeptId},#{borrowTime},#{status},#{equipmentName})
+    </insert>
+    <update id="approval">
+        update researchequipment.borrow
+        set status = 1
+        where equipment_id = #{equipmentId}
+    </update>
+    <delete id="delete">
+        delete from researchequipment.borrow
+        where equipment_id = #{equipmentId}
+    </delete>
+    <select id="searchByDept" resultType="com.example.equipment.pojo.Borrow">
+        select *
+        from researchequipment.borrow
+        where equipmentDept_id = #{deptId} and status = 0
+    </select>
+    <select id="searchByBorrow" resultType="java.lang.Integer">
+        select equipment_id
+        from researchequipment.borrow
+        where dept_id = #{deptId}
+    </select>
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.equipment.mapper.EquipmentMapper">
+
+    <insert id="insert">
+        INSERT INTO researchequipment.equipment
+        (equipment_id, equipment_name, equipment_image, extra, dept_id, create_time, category)
+        VALUES
+        (#{equipmentId},#{equipmentName},#{equipmentImage},#{extra},#{deptId},#{createTime},#{category})
+    </insert>
+
+
+    <update id="update">
+        update researchequipment.equipment
+        SET status = 1
+        where equipment_id = #{id}
+    </update>
+    <update id="borrow">
+        update researchequipment.equipment
+        SET status = 2
+        where equipment_id = #{id}
+    </update>
+    <update id="back">
+        update researchequipment.equipment
+        set status = 0
+        where equipment_id = #{equipmentId}
+    </update>
+    <update id="approval">
+        update researchequipment.equipment
+        set status = 3
+        where equipment_id = #{equipmentId}
+    </update>
+
+
+    <select id="getById" resultType="com.example.equipment.pojo.Equipment">
+        select *
+        from researchequipment.equipment
+        where equipment_id = #{id}
+    </select>
+
+    <select id="listAll" resultType="com.example.equipment.pojo.Equipment">
+        select *
+        from researchequipment.equipment
+    </select>
+
+
+    <select id="listByDeptId" resultType="com.example.equipment.pojo.Equipment">
+        select *
+        from researchequipment.equipment
+        where dept_id = #{deptId}
+    </select>
+    <select id="listAllScrap" resultType="com.example.equipment.pojo.Equipment">
+        select *
+        from researchequipment.equipment
+        where status = 1
+    </select>
+    <select id="listAllBorrow" resultType="com.example.equipment.pojo.Equipment">
+        select *
+        from researchequipment.equipment
+        where status = 0 and dept_id != #{deptId}
+    </select>
+    <select id="search" resultType="com.example.equipment.pojo.Equipment">
+        select *
+        from researchequipment.equipment
+        <where>
+            <if test="equipmentId != null and equipmentId != '' ">
+                equipment_id = #{equipmentId}
+            </if>
+            <if test="category != null and category != '' ">
+                and category = #{category}
+            </if>
+            <if test="status != null and status != 7">
+                and status = #{status}
+            </if>
+            <if test="deptId != null and deptId != '' ">
+                and dept_id = #{deptId}
+            </if>
+        </where>
+    </select>
+    <select id="listBorrowByDept" resultType="com.example.equipment.pojo.Equipment">
+        select *
+        from researchequipment.equipment
+        where status = 2 and dept_id = #{deptId}
+    </select>
+    <select id="listByMyDeptId" resultType="com.example.equipment.pojo.Equipment">
+        select *
+        from researchequipment.equipment
+        where (status = 2 or status = 3 )and dept_id != #{deptId}
+    </select>
+    <select id="searchByEquipmentId" resultType="com.example.equipment.pojo.Equipment">
+        select *
+        from researchequipment.equipment
+        where equipment_id = #{equipmentId}
+    </select>
+
+</mapper>
